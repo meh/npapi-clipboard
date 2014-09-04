@@ -283,6 +283,45 @@ Clipboard_Clear (uint32_t argc, const NPVariant* argv, NPVariant* result)
 	return true;
 }
 
+static bool
+Clipboard_Available (uint32_t argc, const NPVariant* argv, NPVariant* result)
+{
+	unsigned format = 0;
+
+	OpenClipboard(0);
+
+	if (argc == 0) {
+		format = CF_UNICODETEXT;
+	}
+	else if (argc == 1) {
+		if (!NPVARIANT_IS_STRING(argv[0])) {
+			goto error;
+		}
+
+		char* name   = _string(&argv[0]);
+		      format = _format_by_name(name);
+
+		NPN_MemFree(name);
+
+		if (format == 0) {
+			goto error;
+		}
+	}
+	else {
+		goto error;
+	}
+
+	BOOLEAN_TO_NPVARIANT(IsClipboardFormatAvailable(format), *result);
+
+end:
+	CloseClipboard();
+	return true;
+
+error:
+	CloseClipboard();
+	return false;
+}
+
 bool
 Clipboard_HasMethod (NPObject* object, NPIdentifier name)
 {
@@ -291,9 +330,10 @@ Clipboard_HasMethod (NPObject* object, NPIdentifier name)
 	if (NPN_IdentifierIsString(name)) {
 		NPUTF8* string = NPN_UTF8FromIdentifier(name);
 
-		return strcmp(string, "get") == 0 ||
-		       strcmp(string, "set") == 0 ||
-		       strcmp(string, "clear") == 0;
+		return strcmp(string, "get")       == 0 ||
+		       strcmp(string, "set")       == 0 ||
+		       strcmp(string, "clear")     == 0 ||
+		       strcmp(string, "available") == 0;
 	}
 
 	return false;
@@ -315,6 +355,9 @@ Clipboard_Invoke (NPObject* object, NPIdentifier name, const NPVariant* argv, ui
 		}
 		else if (strcmp(string, "clear") == 0) {
 			return Clipboard_Clear(argc, argv, result);
+		}
+		else if (strcmp(string, "available") == 0) {
+			return Clipboard_Available(argc, argv, result);
 		}
 	}
 
