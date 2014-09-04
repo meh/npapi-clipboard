@@ -249,7 +249,7 @@ Clipboard_Set (uint32_t argc, const NPVariant* argv, NPVariant* result)
 		}
 
 		NPString string = NPVARIANT_TO_STRING(argv[0]);
-		char*    chars  = _string(argv[0]);
+		char*    chars  = _string(&argv[0]);
 		HGLOBAL  global = GlobalAlloc(GMEM_MOVEABLE | GMEM_DDESHARE, (string.UTF8Length + 1) * sizeof(wchar_t));
 		wchar_t* result = GlobalLock(global);
 
