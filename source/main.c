@@ -15,7 +15,7 @@ PA_Metadata (void)
 	static PAMetadata meta = {
 		.name        = "Clipboard",
 		.description = "Clipboard",
-		.version     = "1.0.0.0",
+		.version     = "1.0.0.1",
 		.mime        = "application/x-clipboard:clp:Clipboard",
 	};
 
