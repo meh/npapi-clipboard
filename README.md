@@ -20,6 +20,13 @@ optional format name, the default is `text/plain`.
 
 *Note: currently only text is supported.*
 
+### `available()`
+
+Check if the clipboard contains data, it takes an optional parameter with the
+name of the format you want to check for, the default is `text/plain`.
+
+*Note: currently only text is supported.*
+
 ### `clear()`
 
 Clear the contents of the clipboard.
