@@ -193,6 +193,10 @@ Clipboard_Get (uint32_t argc, const NPVariant* argv, NPVariant* result)
 		goto error;
 	}
 
+	if (!IsClipboardFormatAvailable(format)) {
+		goto end;
+	}
+
 	if (format == CF_TEXT || format == CF_UNICODETEXT) {
 		wchar_t* data   = GetClipboardData(CF_UNICODETEXT);
 		size_t   length = wcslen(data);
